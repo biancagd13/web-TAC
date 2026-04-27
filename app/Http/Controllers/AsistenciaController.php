@@ -214,15 +214,14 @@ class AsistenciaController extends Controller
         }
     }
 
-    // ... al final de tu función exportarExcelMensual ...
-
     $titulo = "Taller: {$imparte->taller->nombre} | {$nombreFecha} | Instructor: {$imparte->usuario->nombre}";
-
-    // CAMBIO AQUÍ: Agregamos \Maatwebsite\Excel\Excel::XLSX al final
-    return Excel::download(
-        new AsistenciasExport($dataExcel, $titulo), 
-        'Concentrado_Asistencias_TAC.xlsx', 
-        \Maatwebsite\Excel\Excel::XLSX
-    );
+    return Excel::download(new AsistenciasExport($dataExcel, $titulo), 'Concentrado_Asistencias_TAC.xlsx');
 }
+
+    public function destroy($id)
+    {
+        $asistencia = Asistencia::findOrFail($id);
+        $asistencia->delete();
+        return redirect()->route('asistencias.index')->with('exito', 'Sesión eliminada.');
+    }
 }
